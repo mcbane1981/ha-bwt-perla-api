@@ -43,7 +43,7 @@ class BWTPerlaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 async with aiohttp.ClientSession() as session:
                     async with session.get(url, auth=auth, timeout=5) as resp:
                         if resp.status == 200:
-                            data = await resp.json()
+                            data = await resp.json(content_type=None)
                             if isinstance(data, dict):
                                 _LOGGER.info("Erfolgreich mit BWT Perla unter %s verbunden", clean_ip)
                                 return self.async_create_entry(
