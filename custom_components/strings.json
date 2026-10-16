@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "BWT Perla Einrichten",
+        "description": "Gib die Verbindungsdaten für deine BWT Perla ein.",
+        "data": {
+          "ip_address": "IP-Adresse (z. B. 192.168.1.52)",
+          "login_code": "Login-Code (Passwort aus E-Mail)",
+          "polling_interval": "Abfrage-Intervall in Sekunden (Standard: 30)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur BWT Perla fehlgeschlagen (Port 8080 prüfen).",
+      "invalid_auth": "Ungültiger Login-Code."
+    }
+  }
+}
