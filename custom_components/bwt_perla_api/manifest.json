@@ -1,5 +1,5 @@
 {
-  "domain": "bwt_perla_api",
+  "domain": "bwt_perla",
   "name": "BWT Perla (Local API)",
   "codeowners": ["@user"],
   "config_flow": true,
