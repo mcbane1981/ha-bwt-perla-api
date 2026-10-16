@@ -1,4 +1,4 @@
-DOMAIN = "bwt_perla"
+DOMAIN = "bwt_perla_api"
 
 CONF_IP_ADDRESS = "ip_address"
 CONF_LOGIN_CODE = "login_code"
