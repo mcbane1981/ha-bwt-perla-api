@@ -254,6 +254,7 @@ SENSOR_TYPES = [
         "unit": "L",
         "icon": "mdi:water-plus",
         "device_class": SensorDeviceClass.WATER,
+        "state_class": SensorStateClass.TOTAL_INCREASING,
     },
     {
         "key": "DosingSinceSetup_ml",
