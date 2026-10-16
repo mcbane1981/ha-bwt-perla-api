@@ -1,0 +1,10 @@
+{
+  "domain": "bwt_perla_api",
+  "name": "BWT Perla (Local API)",
+  "codeowners": ["@user"],
+  "config_flow": true,
+  "documentation": "https://github.com/mcbane1981/ha-bwt-perla-api",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/mcbane1981/ha-bwt-perla-api/issues",
+  "version": "1.0.0"
+}
