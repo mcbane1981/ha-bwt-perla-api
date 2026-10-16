@@ -199,7 +199,7 @@ SENSOR_TYPES = [
         "name": "Aktueller Durchfluss",
         "unit": "L/h",
         "icon": "mdi:water-pump",
-        "device_class": SensorDeviceClass.WATER_FLOW_RATE,
+        "device_class": SensorDeviceClass.VOLUME_FLOW_RATE,
         "state_class": SensorStateClass.MEASUREMENT,
     },
     {
