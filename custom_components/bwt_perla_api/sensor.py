@@ -2,8 +2,8 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorDeviceClass,
     SensorStateClass,
-    SensorEntityCategory,
 )
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -57,20 +57,73 @@ ERROR_MAPPING = {
     "88": "Dosierpumpe gestört",
 }
 
+SHORT_ERROR_MAPPING = {
+    "1": "Ventil 1",
+    "2": "Ventil 2",
+    "3": "Verschneidemotor",
+    "5": "Salz <= 20%",
+    "8": "Überstrom V1",
+    "9": "Überstrom V2",
+    "10": "Überstrom V3",
+    "12": "Überstrom MV",
+    "13": "AQA Volume",
+    "14": "Bodensensor",
+    "15": "Schleichwasser",
+    "16": "Druckabfall",
+    "21": "Kolbenposition",
+    "22": "Elektronik",
+    "25": "Sole-Volumen",
+    "26": "AQA Guard Funk",
+    "27": "Salz 0%",
+    "32": "Wartung fällig",
+    "33": "Inspektion",
+    "34": "Expertwartung",
+    "35": "Dosierung fast leer",
+    "36": "Dosierung leer",
+    "43": "Überstrom MV",
+    "44": "Überstrom MV",
+    "45": "Überstrom Pumpe",
+    "46": "Kugelhahn",
+    "54": "Zähler blockiert",
+    "55": "Regen. gestört",
+    "56": "PCB 1.0 Fehler",
+    "57": "PCB 1.1 Fehler",
+    "58": "Motor 1 Pos.",
+    "59": "Motor 2 Pos.",
+    "61": "Leitfähigkeit hoch",
+    "62": "Leitfähigkeit G1",
+    "63": "Leitfähigkeit G2",
+    "64": "Leitfähigkeit Wasser",
+    "65": "Keine Sole",
+    "66": "Temp.-Sensor",
+    "67": "Temp. zu hoch",
+    "68": "Kugelhahn",
+    "74": "Filter spülen",
+    "75": "Sole ungesättigt",
+    "88": "Pumpe gestört",
+}
+
 def parse_error_ids_to_text(raw_ids):
-    """Wandelt Komma-getrennte Fehler-IDs in Klartext um."""
     if not raw_ids or str(raw_ids).strip() in ("", "0", "None", "null"):
         return "Keine Störung"
-    
     ids = [i.strip() for i in str(raw_ids).split(",") if i.strip()]
     translated = [ERROR_MAPPING.get(i, f"Unbekannter Fehler (ID {i})") for i in ids]
-    
     return "; ".join(translated) if translated else "Keine Störung"
 
+def parse_error_ids_to_short_text(raw_ids):
+    if not raw_ids or str(raw_ids).strip() in ("", "0", "None", "null"):
+        return "OK"
+    ids = [i.strip() for i in str(raw_ids).split(",") if i.strip()]
+    translated = [SHORT_ERROR_MAPPING.get(i, f"Fehler {i}") for i in ids]
+    if not translated:
+        return "OK"
+    if len(translated) == 1:
+        return translated[0]
+    return f"{translated[0]} (+{len(translated) - 1})"
 
-# Zuordnung aller 32 JSON-Schlüssel aus BWT GetCurrentData
+
 SENSOR_TYPES = [
-    # Status & Diagnose mit Klartext-Übersetzung
+    # Status & Diagnose
     {
         "key": "ActiveErrorIDs",
         "name": "Fehlermeldung",
@@ -79,10 +132,17 @@ SENSOR_TYPES = [
     },
     {
         "key": "ActiveErrorIDs",
+        "name": "Fehler Kurztext",
+        "unique_suffix": "_short",
+        "icon": "mdi:alert-circle-check-outline",
+        "value_fn": parse_error_ids_to_short_text,
+    },
+    {
+        "key": "ActiveErrorIDs",
         "name": "Aktive Fehler-IDs",
         "unique_suffix": "_raw",
         "icon": "mdi:alert-circle-outline",
-        "entity_category": SensorEntityCategory.DIAGNOSTIC,
+        "entity_category": EntityCategory.DIAGNOSTIC,
         "value_fn": lambda v: v if v and str(v).strip() != "" else "Keine",
     },
     {
@@ -95,7 +155,7 @@ SENSOR_TYPES = [
         "key": "OutOfService",
         "name": "Außer Betrieb",
         "icon": "mdi:power-plug-off",
-        "entity_category": SensorEntityCategory.DIAGNOSTIC,
+        "entity_category": EntityCategory.DIAGNOSTIC,
         "value_fn": lambda v: "Ja" if v == 1 else "Nein",
     },
     {
@@ -108,7 +168,7 @@ SENSOR_TYPES = [
         "key": "FirmwareVersion",
         "name": "Firmware Version",
         "icon": "mdi:information-outline",
-        "entity_category": SensorEntityCategory.DIAGNOSTIC,
+        "entity_category": EntityCategory.DIAGNOSTIC,
     },
 
     # Salz & Regeneriermittel
@@ -289,13 +349,13 @@ SENSOR_TYPES = [
         "key": "LastServiceCustomer",
         "name": "Letzte Routinewartung",
         "icon": "mdi:account-wrench-outline",
-        "entity_category": SensorEntityCategory.DIAGNOSTIC,
+        "entity_category": EntityCategory.DIAGNOSTIC,
     },
     {
         "key": "LastServiceTechnican",
         "name": "Letzte Expertwartung",
         "icon": "mdi:wrench-outline",
-        "entity_category": SensorEntityCategory.DIAGNOSTIC,
+        "entity_category": EntityCategory.DIAGNOSTIC,
     },
 ]
 
