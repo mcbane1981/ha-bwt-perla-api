@@ -33,7 +33,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 async with session.get(url, auth=auth, timeout=10) as resp:
                     if resp.status != 200:
                         raise UpdateFailed(f"HTTP Fehler {resp.status} beim Abruf von {url}")
-                    return await resp.json()
+                    return await resp.json(content_type=None)
         except Exception as err:
             raise UpdateFailed(f"Verbindungsfehler zur BWT Perla ({ip}): {err}") from err
 
